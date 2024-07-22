@@ -10,8 +10,10 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 
 
 public class HelloWorld {
+
+    private static Long countCourse = 1L;
+
     public static void main(String[] args) {
-        // Создаем приложение
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte());
@@ -36,6 +38,17 @@ public class HelloWorld {
 
         app.get("/render", ctx -> ctx.render("index.jte"));
 
+        app.get("/courses", ctx -> {
+            var courses = new ArrayList<>(List.of(
+                    addCourse("Java-разработчик", "Описание"),
+                    addCourse("PHP-разработчик", "Описание"),
+                    addCourse("Python-разработчик", "Описание")));
+
+            var header = "Курсы по программированию";
+            var page = new CoursesPage(courses, header);
+            ctx.render("index2.jte", model("page", page));
+        });
+
         app.get("/courses/{id}", ctx -> {
             var id = ctx.pathParam("id");
             var course = new Course("Java-разработчик", "Описание");
@@ -43,17 +56,14 @@ public class HelloWorld {
             ctx.render("show.jte", model("page", page));
         });
 
-        app.get("/courses", ctx -> {
-            var courses = new ArrayList<>(List.of(
-                    new Course("Java-разработчик", "Описание"),
-                    new Course("PHP-разработчик", "Описание"),
-                    new Course("Python-разработчик", "Описание")));
-
-            var header = "Курсы по программированию";
-            var page = new CoursesPage(courses, header);
-            ctx.render("index2.jte", model("page", page));
-        });
-
         app.start(7070);
+    }
+
+    public static Course addCourse(String name, String description) {
+        var course = new Course(name, description);
+        course.setId(countCourse);
+        countCourse ++;
+
+        return course;
     }
 }
