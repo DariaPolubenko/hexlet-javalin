@@ -2,6 +2,8 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
+import org.example.hexlet.dto.courses.CoursePage;
+import org.example.hexlet.dto.courses.CoursesPage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 
-public class HelloWorld {
+public class App {
 
     private static Long countCourse = 1L;
 
@@ -46,14 +48,14 @@ public class HelloWorld {
 
             var header = "Курсы по программированию";
             var page = new CoursesPage(courses, header);
-            ctx.render("index2.jte", model("page", page));
+            ctx.render("courses/showCourses.jte", model("page", page));
         });
 
         app.get("/courses/{id}", ctx -> {
             var id = ctx.pathParam("id");
             var course = new Course("Java-разработчик", "Описание");
             var page = new CoursePage(course);
-            ctx.render("show.jte", model("page", page));
+            ctx.render("courses/showCourse.jte", model("page", page));
         });
 
         app.start(7070);
