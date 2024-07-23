@@ -21,6 +21,8 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
+        app.get("/", ctx -> ctx.result("Welcome!"));
+
         app.get("/users", ctx -> ctx.result("GET /users"));
         app.post("/users", ctx -> ctx.result("POST /users"));
 
