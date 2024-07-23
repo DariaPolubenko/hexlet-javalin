@@ -1,4 +1,4 @@
-@import org.example.hexlet.CoursesPage
+@import org.example.hexlet.dto.courses.CoursesPage
 @param CoursesPage page
 
 <!doctype html>

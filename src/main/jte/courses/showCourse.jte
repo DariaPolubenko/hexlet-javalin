@@ -1,7 +1,6 @@
-@import org.example.hexlet.CoursePage
+@import org.example.hexlet.dto.courses.CoursePage
 @param CoursePage page
 
-<!-- Для наглядности мы не стали включать сюда основную структуру HTML -->
 <!doctype html>
 <html lang="en">
 <head>
