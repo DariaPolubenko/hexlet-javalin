@@ -1,8 +1,9 @@
 package org.example.hexlet.dto.courses;
 
+import org.example.hexlet.Course;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.hexlet.Course;
 
 @AllArgsConstructor
 @Getter
