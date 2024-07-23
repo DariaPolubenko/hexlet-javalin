@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.apache.commons:commons-text:1.12.0")
     implementation("gg.jte:jte:3.1.12")
     implementation("io.javalin:javalin:6.2.0")
     implementation("io.javalin:javalin-rendering:6.1.6")
