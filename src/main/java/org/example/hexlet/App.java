@@ -2,6 +2,7 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
+import org.apache.commons.text.StringEscapeUtils;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
 
@@ -58,6 +59,21 @@ public class App {
             var course = new Course("Java-разработчик", "Описание");
             var page = new CoursePage(course);
             ctx.render("courses/showCourse.jte", model("page", page));
+        });
+
+        //test attacks
+        app.get("/users/{id}", ctx -> {
+            var id = ctx.pathParam("id");
+            var escapedId = StringEscapeUtils.escapeHtml4(id);
+            ctx.contentType("text/html");
+            ctx.result(escapedId);
+        });
+
+
+        app.get("/attack/{text}", ctx -> {
+            var text = ctx.pathParam("text");
+            ctx.contentType("html");
+            ctx.render("attack.jte", model("text", text));
         });
 
         app.start(7070);
