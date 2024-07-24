@@ -48,17 +48,37 @@ public class App {
         app.get("/render", ctx -> ctx.render("index.jte"));
 
         app.get("/courses", ctx -> {
-            var header = "Курсы по программированию";
-            var page = new CoursesPage(courses, header);
-            ctx.render("courses/showCourses.jte", model("page", page));
+            var term = ctx.queryParam("term");
+
+            if (term != null) {
+                List<Course> filterCourses = new ArrayList<>();
+
+                for (var course : courses) {
+                    var name = course.getName().toLowerCase();
+                    var description = course.getDescription().toLowerCase();
+                    var normalizedTerm = term.toLowerCase();
+
+                    if (name.contains(normalizedTerm) || description.contains(normalizedTerm)) {
+                        filterCourses.add(course);
+                    }
+                }
+                var page = new CoursesPage(filterCourses);
+                page.setTerm(term);
+                ctx.render("courses/showCourses.jte", model("page", page));
+
+            } else {
+                var header = "Курсы по программированию";
+                var page = new CoursesPage(courses);
+                page.setHeader(header);
+                ctx.render("courses/showCourses.jte", model("page", page));
+            }
         });
 
         app.get("/courses/{id}", ctx -> {
-            var id = ctx.pathParamAsClass("id", Integer.class).get();
-            int intId = id;
+            int id = ctx.pathParamAsClass("id", Integer.class).get();
 
             for (var course : courses) {
-                if (course.getId() == intId) {
+                if (course.getId() == id) {
                     var page = new CoursePage(course);
                     ctx.render("courses/showCourse.jte", model("page", page));
                     break;
@@ -88,7 +108,6 @@ public class App {
         var course = new Course(name, description);
         course.setId(countCourse);
         countCourse ++;
-
         return course;
     }
 
