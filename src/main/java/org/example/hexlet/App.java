@@ -17,18 +17,10 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 public class App {
     private static Long countCourse = 1L;
 
-    private static List<Course> courses;
-
-    static {
-        try {
-            courses = new ArrayList<>(List.of(
+    private static List<Course> courses = new ArrayList<>(List.of(
                     addCourse("Java-разработчик", getDescription("javaDescription.txt")),
                     addCourse("PHP-разработчик", getDescription("phpDescription.txt")),
                     addCourse("Python-разработчик", getDescription("pythonDescription.txt"))));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void main(String[] args) {
         var app = Javalin.create(config -> {
