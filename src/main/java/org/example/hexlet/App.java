@@ -6,6 +6,8 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +15,20 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 
 
 public class App {
-
     private static Long countCourse = 1L;
+
+    private static List<Course> courses;
+
+    static {
+        try {
+            courses = new ArrayList<>(List.of(
+                    addCourse("Java-разработчик", getDescription("javaDescription.txt")),
+                    addCourse("PHP-разработчик", getDescription("phpDescription.txt")),
+                    addCourse("Python-разработчик", getDescription("pythonDescription.txt"))));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
         var app = Javalin.create(config -> {
@@ -23,7 +37,6 @@ public class App {
         });
 
         app.get("/", ctx -> ctx.result("Welcome!"));
-
         app.get("/users", ctx -> ctx.result("GET /users"));
         app.post("/users", ctx -> ctx.result("POST /users"));
 
@@ -32,7 +45,6 @@ public class App {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.result("Hello, " + name + "!");
         });
-
 
         app.get("users/{id}/post/{postId}", ctx -> {
             var userId = ctx.pathParamAsClass("id", Long.class).get();
@@ -44,21 +56,22 @@ public class App {
         app.get("/render", ctx -> ctx.render("index.jte"));
 
         app.get("/courses", ctx -> {
-            var courses = new ArrayList<>(List.of(
-                    addCourse("Java-разработчик", "Описание"),
-                    addCourse("PHP-разработчик", "Описание"),
-                    addCourse("Python-разработчик", "Описание")));
-
             var header = "Курсы по программированию";
             var page = new CoursesPage(courses, header);
             ctx.render("courses/showCourses.jte", model("page", page));
         });
 
         app.get("/courses/{id}", ctx -> {
-            var id = ctx.pathParam("id");
-            var course = new Course("Java-разработчик", "Описание");
-            var page = new CoursePage(course);
-            ctx.render("courses/showCourse.jte", model("page", page));
+            var id = ctx.pathParamAsClass("id", Integer.class).get();
+            int intId = id;
+
+            for (var course : courses) {
+                if (course.getId() == intId) {
+                    var page = new CoursePage(course);
+                    ctx.render("courses/showCourse.jte", model("page", page));
+                    break;
+                }
+            }
         });
 
         //test attacks
@@ -85,5 +98,15 @@ public class App {
         countCourse ++;
 
         return course;
+    }
+
+    public static String getDescription(String file) {
+        var path = Paths.get("/Users/new/Desktop/Develop/HexletJavalin/src/main/resources/" + file).toAbsolutePath().normalize();
+
+        try {
+            return Files.readString(path);
+        } catch (Exception e) {
+            return "Описание отсутствует";
+        }
     }
 }
