@@ -3,7 +3,14 @@
 
 @template.layout.page(
 content = @`
-    <h2>${page.getHeader()}</h2>
+    <form action="/courses" method="get">
+        <input type="search" required name="term" value="${page.getTerm()}">
+        <input type="submit" value="Искать">
+    </form>
+    @if(page.getHeader() != null)
+        <h2>${page.getHeader()}</h2>
+    @endif
+
     @if(page.getCourses().isEmpty())
         <p>Пока не добавлено ни одного курса</p>
     @else
