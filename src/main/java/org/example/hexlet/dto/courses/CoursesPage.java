@@ -2,7 +2,7 @@ package org.example.hexlet.dto.courses;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.hexlet.Course;
+import org.example.hexlet.model.Course;
 
 import java.util.List;
 
