@@ -2,7 +2,6 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
-import org.apache.commons.lang3.StringUtils;
 import org.example.hexlet.dto.models.CoursesPage;
 import org.example.hexlet.dto.models.UsersPage;
 import org.example.hexlet.model.Course;
@@ -54,10 +53,17 @@ public class App {
             var term = ctx.queryParam("term");
 
             if (term != null) {
-                var filterCourses = CourseRepository.getEntities().stream()
-                        .filter(c -> StringUtils.startsWithIgnoreCase(c.getName(), term) || StringUtils.startsWithIgnoreCase(c.getDescription(), term))
-                        .toList();
+                var filterCourses = new ArrayList<Course>();
+                var normalizedTerm = term.toLowerCase();
 
+                for (var course : CourseRepository.getEntities()) {
+                    var name = course.getName().toLowerCase();
+                    var description = course.getDescription().toLowerCase();
+
+                    if (name.contains(normalizedTerm) || description.contains(normalizedTerm)) {
+                        filterCourses.add(course);
+                    }
+                }
                 var page = new CoursesPage(filterCourses);
                 page.setTerm(term);
                 ctx.render("courses/showCourses.jte", model("page", page));
