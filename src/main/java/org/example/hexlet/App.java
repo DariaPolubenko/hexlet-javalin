@@ -52,19 +52,21 @@ public class App {
 
         app.get("/courses", ctx -> {
             var term = ctx.queryParam("term");
-            String header = "";
 
-            List<Course> filterCourses;
             if (term != null) {
-                filterCourses = CourseRepository.getEntities().stream()
+                var filterCourses = CourseRepository.getEntities().stream()
                         .filter(c -> StringUtils.startsWithIgnoreCase(c.getName(), term) || StringUtils.startsWithIgnoreCase(c.getDescription(), term))
                         .toList();
+
+                var page = new CoursesPage(filterCourses);
+                page.setTerm(term);
+                ctx.render("courses/showCourses.jte", model("page", page));
             } else {
-                filterCourses = CourseRepository.getEntities();
-                header = "Курсы по программированию";
+                var header = "Курсы по программированию";
+                var page = new CoursesPage(CourseRepository.getEntities());
+                page.setHeader(header);
+                ctx.render("courses/showCourses.jte", model("page", page));
             }
-            var page = new CoursesPage(filterCourses, header, term);
-            ctx.render("courses/showCourses.jte", model("page", page));
         });
 /*
         app.get("/courses/{id}", ctx -> {
