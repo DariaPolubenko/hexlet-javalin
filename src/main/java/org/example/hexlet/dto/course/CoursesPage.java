@@ -1,4 +1,4 @@
-package org.example.hexlet.dto.models;
+package org.example.hexlet.dto.course;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -2,8 +2,8 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
-import org.example.hexlet.dto.models.CoursesPage;
-import org.example.hexlet.dto.models.UsersPage;
+import org.example.hexlet.dto.course.CoursesPage;
+import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
