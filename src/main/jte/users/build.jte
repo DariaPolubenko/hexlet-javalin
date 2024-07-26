@@ -1,6 +1,7 @@
 @template.layout.page(
 content = @`
-    <form action="/users/build" method="post">
+    <p style="margin-top: 35px" class="fw-light">Добавление пользователя</p>
+    <form style="margin-top: 15px" action="/users/build" method="post">
         <div class="mb-3">
             <label>
                 <input type="text" class="form-control" placeholder="Имя" name="name"/>

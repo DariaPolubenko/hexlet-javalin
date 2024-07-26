@@ -13,7 +13,7 @@
     <title>Hexlet Javalin Example</title>
 </head>
 <body class="container">
-    <p class="fw-light">Hexlet Javalin Example</p>
+    <p class="fw-light" style="margin-top: 10px">Hexlet Javalin Example</p>
     <div class="btn-group row">
         <p class="d-inline-flex gap-1">
             <a href="/" class="btn btn-outline-primary rounded-1 fw-light">Главная</a>

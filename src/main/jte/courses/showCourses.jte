@@ -3,23 +3,25 @@
 
 @template.layout.page(
 content = @`
-    <form action="/courses" method="get">
+    <form style="margin-top: 10px" action="/courses" method="get">
         <input type="search" name="term" value="${page.getTerm()}">
         <input type="submit" value="Искать">
     </form>
-    @if(page.getHeader() != null)
-        <h2>${page.getHeader()}</h2>
-    @endif
+    <div class="fw-light" style="margin-top: 35px">
+        @if(page.getHeader() != null)
+            <h2 class="fw-light" style="margin-bottom: 15px">${page.getHeader()}</h2>
+        @endif
 
-    @if(page.getCourses().isEmpty())
-        <p>Пока не добавлено ни одного курса</p>
-    @else
-        @for(var course : page.getCourses())
-            <div>
-                <h3><a href="/courses/${course.getId()}">${course.getName()}</a></h3>
-                <p>${course.getDescription()}</p>
-            </div>
-        @endfor
-    @endif
+        @if(page.getCourses().isEmpty())
+            <p>Пока не добавлено ни одного курса</p>
+        @else
+            @for(var course : page.getCourses())
+                <div>
+                    <h3 class="fw-light"><a href="/courses/${course.getId()}">${course.getName()}</a></h3>
+                    <p>${course.getDescription()}</p>
+                </div>
+            @endfor
+        @endif
+    </div>
     `
 )
