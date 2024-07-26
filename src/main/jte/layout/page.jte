@@ -13,26 +13,17 @@
     <title>Hexlet Javalin Example</title>
 </head>
 <body>
-
-<div class="container text-center">
-    <div class="row align-items-center">
-        <div class="col">
-            <p>Hexlet Javalin Example</p>
-        </div>
-        <div class="col">
-            <p><a href="/">Главная</a></p>
-        </div>
-        <div class="col">
-            <p><a href="/courses">Курсы</a></p>
-        </div>
-        <div class="col">
-            <p><a href="/users/build">Добавить пользователя</a></p>
-        </div>
+    <p>Hexlet Javalin Example</p>
+    <div class="btn-group">
+        <p class="d-inline-flex gap-1">
+            <a href="/" class="btn">Главная</a>
+            <a href="/courses" class="btn">Курсы</a>
+            <a href="/users/build" class="btn">Добавить пользователя</a>
+        </p>
     </div>
-</div>
-${content}
-<footer>
-    <a href="https://github.com/DariaPolubenko">GitHub</a>
-</footer>
+    ${content}
+    <footer>
+        <a href="https://github.com/DariaPolubenko">GitHub</a>
+    </footer>
 </body>
 </html>
