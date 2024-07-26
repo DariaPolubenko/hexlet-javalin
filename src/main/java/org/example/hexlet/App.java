@@ -92,7 +92,7 @@ public class App {
             ctx.render("courses/build.jte");
         });
 
-        app.post("/courses/build", ctx -> {
+        app.post("/courses", ctx -> {
             var name = ctx.formParam("name");
             var description = ctx.formParam("description");
 
