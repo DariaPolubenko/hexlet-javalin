@@ -100,6 +100,7 @@ public class App {
             ctx.redirect("/courses");
         });
 
+
         /*
         //test attacks
         app.get("/users/{id}", ctx -> {
@@ -117,10 +118,11 @@ public class App {
         });
 
         app.get("/users/build", ctx -> {
-            ctx.render("users/build.jte");
+            var page = new BuildUserPage();
+            ctx.render("users/build.jte", model("page", page));
         });
 
-        app.post("/users/build", ctx -> {
+        app.post("/users", ctx -> {
             var name = ctx.formParam("name");
             var email = ctx.formParam("email").trim().toLowerCase();;
 
