@@ -2,12 +2,15 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
-import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.dto.users.UsersPage;
+import io.javalin.validation.ValidationException;
+
 import org.example.hexlet.model.Course;
-import org.example.hexlet.model.User;
+import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.repository.CourseRepository;
+import org.example.hexlet.model.User;
+import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.repository.UserRepository;
+import org.example.hexlet.dto.users.BuildUserPage;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -124,12 +127,19 @@ public class App {
         app.post("/users/build", ctx -> {
             var name = ctx.formParam("name");
             var email = ctx.formParam("email").trim().toLowerCase();;
-            var password = ctx.formParam("password");
-            var passwordConfirmation = ctx.formParam("passwordConfirmation");
 
-            var user = new User(name, email, password);
-            UserRepository.save(user);
-            ctx.redirect("/users");
+            try {
+                var passwordConfirmation = ctx.formParam("passwordConfirmation");
+                var password = ctx.formParamAsClass("password", String.class)
+                        .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
+                        .get();
+                var user = new User(name, email, password);
+                UserRepository.save(user);
+                ctx.redirect("/users");
+            } catch (ValidationException e) {
+                var page = new BuildUserPage(name, email, e.getErrors());
+                ctx.render("users/build.jte", model("page", page));
+            }
         });
 
         app.get("/users", ctx -> {
