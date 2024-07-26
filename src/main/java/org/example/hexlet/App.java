@@ -21,8 +21,6 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 
 
 public class App {
-    private static Long countCourse = 1L;
-
     private static List<Course> courses = new ArrayList<>(List.of(new Course("Java-разработчик", getDescription("javaDescription.txt")),
             new Course("PHP-разработчик", getDescription("phpDescription.txt")),
             new Course("Python-разработчик", getDescription("pythonDescription.txt"))));
@@ -37,7 +35,7 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> ctx.result("Welcome!"));
+        app.get("/", ctx -> ctx.render("index.jte"));
 
         app.get("/hello", ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
@@ -49,8 +47,6 @@ public class App {
             var postId = ctx.pathParamAsClass("postId", Long.class).get();
             ctx.result("User ID: " + userId + "\nPost Id: " + postId);
         });
-
-        app.get("/general", ctx -> ctx.render("index.jte"));
 
         app.get("/courses", ctx -> {
             var term = ctx.queryParam("term");

@@ -8,7 +8,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
     <title>Зарагистрироваться</title>
-    <h3 style="margin-bottom: 30px"><a href="/general">Главная</a></h3>
+    <h3 style="margin-bottom: 30px"><a href="/">Главная</a></h3>
 </head>
 <body>
     <form action="/users/build" method="post">

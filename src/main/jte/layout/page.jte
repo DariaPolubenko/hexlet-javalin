@@ -20,7 +20,7 @@
             <p>Hexlet Javalin Example</p>
         </div>
         <div class="col">
-            <p><a href="/general">Главная</a></p>
+            <p><a href="/">Главная</a></p>
         </div>
         <div class="col">
             <p><a href="/courses">Курсы</a></p>
