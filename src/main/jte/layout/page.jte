@@ -12,13 +12,13 @@
           crossorigin="anonymous">
     <title>Hexlet Javalin Example</title>
 </head>
-<body>
-    <p>Hexlet Javalin Example</p>
-    <div class="btn-group">
+<body class="container">
+    <p class="fw-light">Hexlet Javalin Example</p>
+    <div class="btn-group row">
         <p class="d-inline-flex gap-1">
-            <a href="/" class="btn">Главная</a>
-            <a href="/courses" class="btn">Курсы</a>
-            <a href="/users/build" class="btn">Добавить пользователя</a>
+            <a href="/" class="btn btn-outline-primary rounded-1 fw-light">Главная</a>
+            <a href="/courses" class="btn btn-outline-primary rounded-1 fw-light">Курсы</a>
+            <a href="/users/build" class="btn btn-outline-primary rounded-1 fw-light">Добавить пользователя</a>
         </p>
     </div>
     ${content}
