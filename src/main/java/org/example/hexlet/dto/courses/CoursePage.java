@@ -1,4 +1,4 @@
-package org.example.hexlet.dto.course;
+package org.example.hexlet.dto.courses;
 
 import org.example.hexlet.model.Course;
 
