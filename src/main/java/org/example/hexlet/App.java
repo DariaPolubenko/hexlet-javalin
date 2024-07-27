@@ -3,6 +3,8 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
+import org.apache.commons.text.StringEscapeUtils;
+import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.dto.users.BuildUserPage;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 
 
 public class App {
@@ -75,16 +78,29 @@ public class App {
         });
 
         app.get("/courses/build", ctx -> {
-            ctx.render("courses/build.jte");
+            var page = new BuildCoursePage();
+            ctx.render("courses/build.jte", model("page", page));
         });
 
         app.post("/courses", ctx -> {
-            var name = ctx.formParam("name");
-            var description = ctx.formParam("description");
+            String name = "";
+            String description = "";
 
-            var course = new Course(name, description);
-            CourseRepository.save(course);
-            ctx.redirect("/courses");
+            try {
+                name = ctx.formParamAsClass("name", String.class)
+                        .check(value -> value.length() > 2, "Имя не может содержать менее 3 символов")
+                        .get();
+                description = ctx.formParamAsClass("description", String.class)
+                        .check(value -> value.length() > 10, "Описание не может содержать менее 10 символов")
+                        .get();
+                var course = new Course(name, description);
+                CourseRepository.save(course);
+                ctx.redirect("/courses");
+
+            } catch (ValidationException e) {
+                var page = new BuildCoursePage(name, description, e.getErrors());
+                ctx.render("courses/build.jte", model("page", page));
+            }
         });
 
         app.get("/courses/{id}", ctx -> {
@@ -99,9 +115,12 @@ public class App {
             }
         });
 
+        app.get("/users/build", ctx -> {
+            var page = new BuildUserPage();
+            ctx.render("users/build.jte", model("page", page));
+        });
 
 
-        /*
         //test attacks
         app.get("/users/{id}", ctx -> {
             var id = ctx.pathParam("id");
@@ -109,7 +128,7 @@ public class App {
             ctx.contentType("text/html");
             ctx.result(escapedId);
         });
-         */
+
 
         app.get("/attack/{text}", ctx -> {
             var text = ctx.pathParam("text");
@@ -117,14 +136,15 @@ public class App {
             ctx.render("attack.jte", model("text", text));
         });
 
-        app.get("/users/build", ctx -> {
-            var page = new BuildUserPage();
-            ctx.render("users/build.jte", model("page", page));
+        app.get("/users", ctx -> {
+            var users = UserRepository.getEntities();
+            var page = new UsersPage(users);
+            ctx.render("users/showUsers.jte", model("page", page));
         });
 
         app.post("/users", ctx -> {
-            var name = ctx.formParam("name");
-            var email = ctx.formParam("email").trim().toLowerCase();;
+            var name = capitalize(ctx.formParam("name"));
+            var email = ctx.formParam("email").trim().toLowerCase();
 
             try {
                 var passwordConfirmation = ctx.formParam("passwordConfirmation");
@@ -138,12 +158,6 @@ public class App {
                 var page = new BuildUserPage(name, email, e.getErrors());
                 ctx.render("users/build.jte", model("page", page));
             }
-        });
-
-        app.get("/users", ctx -> {
-            var users = UserRepository.getEntities();
-            var page = new UsersPage(users);
-            ctx.render("users/showUsers.jte", model("page", page));
         });
 
         app.start(7070);
