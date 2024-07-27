@@ -3,14 +3,14 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
-
-import org.example.hexlet.model.Course;
+import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.repository.CourseRepository;
-import org.example.hexlet.model.User;
-import org.example.hexlet.dto.users.UsersPage;
-import org.example.hexlet.repository.UserRepository;
 import org.example.hexlet.dto.users.BuildUserPage;
+import org.example.hexlet.dto.users.UsersPage;
+import org.example.hexlet.model.Course;
+import org.example.hexlet.model.User;
+import org.example.hexlet.repository.CourseRepository;
+import org.example.hexlet.repository.UserRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -73,19 +73,6 @@ public class App {
                 ctx.render("courses/showCourses.jte", model("page", page));
             }
         });
-/*
-        app.get("/courses/{id}", ctx -> {
-            int id = ctx.pathParamAsClass("id", Integer.class).get();
-
-            for (var course : CourseRepository.getEntities()) {
-                if (course.getId() == id) {
-                    var page = new CoursePage(course);
-                    ctx.render("courses/showCourse.jte", model("page", page));
-                    break;
-                }
-            }
-        });
- */
 
         app.get("/courses/build", ctx -> {
             ctx.render("courses/build.jte");
@@ -99,6 +86,19 @@ public class App {
             CourseRepository.save(course);
             ctx.redirect("/courses");
         });
+
+        app.get("/courses/{id}", ctx -> {
+            int id = ctx.pathParamAsClass("id", Integer.class).get();
+
+            for (var course : CourseRepository.getEntities()) {
+                if (course.getId() == id) {
+                    var page = new CoursePage(course);
+                    ctx.render("courses/showCourse.jte", model("page", page));
+                    break;
+                }
+            }
+        });
+
 
 
         /*
