@@ -17,8 +17,10 @@
     <p class="fw-light" style="margin-top: 10px">Hexlet Javalin Example</p>
     <div class="btn-group row">
         <p class="d-inline-flex gap-1">
-            <a href="/" class="btn btn-outline-primary rounded-1 fw-light">Главная</a>
+            <a href="${NamedRoutes.mainPath()}" class="btn btn-outline-primary rounded-1 fw-light">Главная</a>
             <a href="${NamedRoutes.coursesPath()}" class="btn btn-outline-primary rounded-1 fw-light">Курсы</a>
+            <a href="${NamedRoutes.buildCoursesPath()}" class="btn btn-outline-primary rounded-1 fw-light">Добавить курс</a>
+            <a href="${NamedRoutes.usersPath()}" class="btn btn-outline-primary rounded-1 fw-light">Пользователи</a>
             <a href="${NamedRoutes.buildUsersPath()}" class="btn btn-outline-primary rounded-1 fw-light">Добавить пользователя</a>
         </p>
     </div>
