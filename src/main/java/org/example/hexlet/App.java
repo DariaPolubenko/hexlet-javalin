@@ -62,7 +62,6 @@ public class App {
 
     public static String getDescription(String file) {
         var path = Paths.get("/Users/new/Desktop/Develop/HexletJavalin/src/main/resources/" + file).toAbsolutePath().normalize();
-
         try {
             return Files.readString(path);
         } catch (Exception e) {
