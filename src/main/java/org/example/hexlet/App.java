@@ -2,17 +2,10 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
-import io.javalin.validation.ValidationException;
-import org.apache.commons.text.StringEscapeUtils;
-import org.example.hexlet.dto.courses.BuildCoursePage;
-import org.example.hexlet.dto.courses.CoursePage;
-import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.dto.users.BuildUserPage;
-import org.example.hexlet.dto.users.UsersPage;
+import org.example.hexlet.controller.CoursesController;
+import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.model.Course;
-import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
-import org.example.hexlet.repository.UserRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
-import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.example.hexlet.NamedRoutes.*;
 
 
@@ -46,115 +38,18 @@ public class App {
             ctx.result("Hello, " + name + "!");
         });
 
-        app.get(coursesPath(), ctx -> {
-            var term = ctx.queryParam("term");
+        app.get(coursesPath(), CoursesController::show);
+        app.get(buildCoursesPath(), CoursesController::build);
+        app.post(coursesPath(), CoursesController::create);
+        app.get(coursesPath("{id}"), CoursesController::find);
 
-            if (term != null) {
-                var filterCourses = new ArrayList<Course>();
-                var normalizedTerm = term.toLowerCase();
-
-                for (var course : CourseRepository.getEntities()) {
-                    var name = course.getName().toLowerCase();
-                    var description = course.getDescription().toLowerCase();
-
-                    if (name.contains(normalizedTerm) || description.contains(normalizedTerm)) {
-                        filterCourses.add(course);
-                    }
-                }
-                var page = new CoursesPage(filterCourses);
-                page.setTerm(term);
-                ctx.render("courses/showCourses.jte", model("page", page));
-
-            } else {
-                var header = "Курсы по программированию";
-                var page = new CoursesPage(CourseRepository.getEntities());
-                page.setHeader(header);
-                ctx.render("courses/showCourses.jte", model("page", page));
-            }
-        });
-
-        app.get(buildCoursesPath(), ctx -> {
-            var page = new BuildCoursePage();
-            ctx.render("courses/build.jte", model("page", page));
-        });
-
-        app.post(coursesPath(), ctx -> {
-            String name = "";
-            String description = "";
-
-            try {
-                name = ctx.formParamAsClass("name", String.class)
-                        .check(value -> value.length() > 2, "Имя не может содержать менее 3 символов")
-                        .get();
-                description = ctx.formParamAsClass("description", String.class)
-                        .check(value -> value.length() > 10, "Описание не может содержать менее 10 символов")
-                        .get();
-                var course = new Course(name, description);
-                CourseRepository.save(course);
-                ctx.redirect("/courses");
-
-            } catch (ValidationException e) {
-                var page = new BuildCoursePage(name, description, e.getErrors());
-                ctx.render("courses/build.jte", model("page", page));
-            }
-        });
-
-        app.get(coursesPath("{id}"), ctx -> {
-            int id = ctx.pathParamAsClass("id", Integer.class).get();
-
-            for (var course : CourseRepository.getEntities()) {
-                if (course.getId() == id) {
-                    var page = new CoursePage(course);
-                    ctx.render("courses/showCourse.jte", model("page", page));
-                    break;
-                }
-            }
-        });
-
-        app.get(usersPath(), ctx -> {
-            var users = UserRepository.getEntities();
-            var page = new UsersPage(users);
-            ctx.render("users/showUsers.jte", model("page", page));
-        });
-
-        app.post(usersPath(), ctx -> {
-            var name = capitalize(ctx.formParam("name"));
-            var email = ctx.formParam("email").trim().toLowerCase();
-
-            try {
-                var passwordConfirmation = ctx.formParam("passwordConfirmation");
-                var password = ctx.formParamAsClass("password", String.class)
-                        .check(value -> value.equals(passwordConfirmation), "Пароли не совпадают")
-                        .get();
-                var user = new User(name, email, password);
-                UserRepository.save(user);
-                ctx.redirect("/users");
-            } catch (ValidationException e) {
-                var page = new BuildUserPage(name, email, e.getErrors());
-                ctx.render("users/build.jte", model("page", page));
-            }
-        });
-
-        app.get(usersPath("{id}", "{postId}"), ctx -> {
-            var userId = ctx.pathParamAsClass("id", Long.class).get();
-            var postId = ctx.pathParamAsClass("postId", Long.class).get();
-            ctx.result("User ID: " + userId + "\nPost Id: " + postId);
-        });
-
-        app.get(buildUsersPath(), ctx -> {
-            var page = new BuildUserPage();
-            ctx.render("users/build.jte", model("page", page));
-        });
-
+        app.get(usersPath(), UsersController::showUsers);
+        app.get(usersPath("{id}", "{postId}"), UsersController::getPost);
+        app.get(buildUsersPath(), UsersController::build);
+        app.post(usersPath(), UsersController::create);
 
         //test attacks
-        app.get(usersPath("{id}"), ctx -> {
-            var id = ctx.pathParam("id");
-            var escapedId = StringEscapeUtils.escapeHtml4(id);
-            ctx.contentType("text/html");
-            ctx.result(escapedId);
-        });
-
+        app.get(usersPath("{id}"), UsersController::testAttack);
 
         app.get("/attack/{text}", ctx -> {
             var text = ctx.pathParam("text");
