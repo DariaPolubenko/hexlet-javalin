@@ -21,6 +21,7 @@ import java.util.List;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.example.hexlet.NamedRoutes.*;
 
 
 public class App {
@@ -38,20 +39,14 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
+        app.get(mainPath(), ctx -> ctx.render("index.jte"));
 
-        app.get("/hello", ctx -> {
+        app.get(helloPath(), ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.result("Hello, " + name + "!");
         });
 
-        app.get("users/{id}/post/{postId}", ctx -> {
-            var userId = ctx.pathParamAsClass("id", Long.class).get();
-            var postId = ctx.pathParamAsClass("postId", Long.class).get();
-            ctx.result("User ID: " + userId + "\nPost Id: " + postId);
-        });
-
-        app.get("/courses", ctx -> {
+        app.get(coursesPath(), ctx -> {
             var term = ctx.queryParam("term");
 
             if (term != null) {
@@ -69,6 +64,7 @@ public class App {
                 var page = new CoursesPage(filterCourses);
                 page.setTerm(term);
                 ctx.render("courses/showCourses.jte", model("page", page));
+
             } else {
                 var header = "Курсы по программированию";
                 var page = new CoursesPage(CourseRepository.getEntities());
@@ -77,12 +73,12 @@ public class App {
             }
         });
 
-        app.get("/courses/build", ctx -> {
+        app.get(buildCoursesPath(), ctx -> {
             var page = new BuildCoursePage();
             ctx.render("courses/build.jte", model("page", page));
         });
 
-        app.post("/courses", ctx -> {
+        app.post(coursesPath(), ctx -> {
             String name = "";
             String description = "";
 
@@ -103,7 +99,7 @@ public class App {
             }
         });
 
-        app.get("/courses/{id}", ctx -> {
+        app.get(coursesPath("{id}"), ctx -> {
             int id = ctx.pathParamAsClass("id", Integer.class).get();
 
             for (var course : CourseRepository.getEntities()) {
@@ -115,34 +111,13 @@ public class App {
             }
         });
 
-        app.get("/users/build", ctx -> {
-            var page = new BuildUserPage();
-            ctx.render("users/build.jte", model("page", page));
-        });
-
-
-        //test attacks
-        app.get("/users/{id}", ctx -> {
-            var id = ctx.pathParam("id");
-            var escapedId = StringEscapeUtils.escapeHtml4(id);
-            ctx.contentType("text/html");
-            ctx.result(escapedId);
-        });
-
-
-        app.get("/attack/{text}", ctx -> {
-            var text = ctx.pathParam("text");
-            ctx.contentType("html");
-            ctx.render("attack.jte", model("text", text));
-        });
-
-        app.get("/users", ctx -> {
+        app.get(usersPath(), ctx -> {
             var users = UserRepository.getEntities();
             var page = new UsersPage(users);
             ctx.render("users/showUsers.jte", model("page", page));
         });
 
-        app.post("/users", ctx -> {
+        app.post(usersPath(), ctx -> {
             var name = capitalize(ctx.formParam("name"));
             var email = ctx.formParam("email").trim().toLowerCase();
 
@@ -158,6 +133,33 @@ public class App {
                 var page = new BuildUserPage(name, email, e.getErrors());
                 ctx.render("users/build.jte", model("page", page));
             }
+        });
+
+        app.get(usersPath("{id}", "{postId}"), ctx -> {
+            var userId = ctx.pathParamAsClass("id", Long.class).get();
+            var postId = ctx.pathParamAsClass("postId", Long.class).get();
+            ctx.result("User ID: " + userId + "\nPost Id: " + postId);
+        });
+
+        app.get(buildUsersPath(), ctx -> {
+            var page = new BuildUserPage();
+            ctx.render("users/build.jte", model("page", page));
+        });
+
+
+        //test attacks
+        app.get(usersPath("{id}"), ctx -> {
+            var id = ctx.pathParam("id");
+            var escapedId = StringEscapeUtils.escapeHtml4(id);
+            ctx.contentType("text/html");
+            ctx.result(escapedId);
+        });
+
+
+        app.get("/attack/{text}", ctx -> {
+            var text = ctx.pathParam("text");
+            ctx.contentType("html");
+            ctx.render("attack.jte", model("text", text));
         });
 
         app.start(7070);
