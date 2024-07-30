@@ -9,8 +9,6 @@ import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 
-import java.util.ArrayList;
-
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class CoursesController {
@@ -23,7 +21,7 @@ public class CoursesController {
                     .filter(c -> {
                         var name =c.getName().toLowerCase();
                         var description = c.getDescription().toLowerCase();
-                        return name.contains(normalizedTerm) || description.contains(normalizedTerm)
+                        return name.contains(normalizedTerm) || description.contains(normalizedTerm);
                     }).toList();
 
             var page = new CoursesPage(filterCourses);
@@ -44,8 +42,8 @@ public class CoursesController {
     }
 
     public static void find(Context ctx) {
-        int id = ctx.pathParamAsClass("id", Integer.class).get();
-        var course = CourseRepository.find(id).orElseThrow(() -> new NotFoundResponse("Course with id = " + id + " not found"))
+        var id = ctx.pathParamAsClass("id", Long.class).get();
+        var course = CourseRepository.find(id).orElseThrow(() -> new NotFoundResponse("Course with id = " + id + " not found"));
         var page = new CoursePage(course);
         ctx.render("courses/showCourse.jte", model("page", page));
 
