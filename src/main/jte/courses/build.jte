@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.courses.BuildCoursePage
 @param BuildCoursePage page
 
@@ -14,7 +15,7 @@ content = @`
     @endif
 
     <p style="margin-top: 35px" class="fw-light">Добавление курса</p>
-    <form action="/courses" method="post">
+    <form action="${NamedRoutes.coursesPath()}" method="post">
         <div class="mb-3">
             <label>
                 <input type="text" class="form-control" placeholder="Название" name="name" value="${page.getName()}"/>

@@ -1,4 +1,5 @@
 @import gg.jte.Content
+@import org.example.hexlet.NamedRoutes
 @param Content content
 
 <!doctype html>
@@ -17,8 +18,8 @@
     <div class="btn-group row">
         <p class="d-inline-flex gap-1">
             <a href="/" class="btn btn-outline-primary rounded-1 fw-light">Главная</a>
-            <a href="/courses" class="btn btn-outline-primary rounded-1 fw-light">Курсы</a>
-            <a href="/users/build" class="btn btn-outline-primary rounded-1 fw-light">Добавить пользователя</a>
+            <a href="${NamedRoutes.coursesPath()}" class="btn btn-outline-primary rounded-1 fw-light">Курсы</a>
+            <a href="${NamedRoutes.buildUsersPath()}" class="btn btn-outline-primary rounded-1 fw-light">Добавить пользователя</a>
         </p>
     </div>
     ${content}

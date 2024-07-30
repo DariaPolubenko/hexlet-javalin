@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.courses.CoursesPage
 @param CoursesPage page
 
@@ -17,7 +18,7 @@ content = @`
         @else
             @for(var course : page.getCourses())
                 <div>
-                    <h3 class="fw-light"><a href="/courses/${course.getId()}">${course.getName()}</a></h3>
+                    <h3 class="fw-light"><a href="${NamedRoutes.coursesPath(course.getId())}">${course.getName()}</a></h3>
                     <p>${course.getDescription()}</p>
                 </div>
             @endfor
