@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import org.example.hexlet.controller.CoursesController;
 import org.example.hexlet.controller.UsersController;
+import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 
@@ -31,7 +32,12 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get(mainPath(), ctx -> ctx.render("index.jte"));
+        app.get(mainPath(), ctx -> {
+            var visited = Boolean.valueOf(ctx.cookie("visited"));
+            var page = new MainPage(visited);
+            ctx.render("index.jte", model("page", page));
+            ctx.cookie("visited", String.valueOf(true));
+        });
 
         app.get(helloPath(), ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
