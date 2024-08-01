@@ -3,6 +3,7 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import org.example.hexlet.controller.CoursesController;
+import org.example.hexlet.controller.SessionsController;
 import org.example.hexlet.controller.UsersController;
 import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.model.Course;
@@ -34,10 +35,15 @@ public class App {
 
         app.get(mainPath(), ctx -> {
             var visited = Boolean.valueOf(ctx.cookie("visited"));
-            var page = new MainPage(visited);
+            var currentUser = ctx.cookie("JSESSIONID");
+            var page = new MainPage(visited, currentUser);
             ctx.render("index.jte", model("page", page));
             ctx.cookie("visited", String.valueOf(true));
         });
+
+        app.get(NamedRoutes.buildSessionsPath(), SessionsController::build);
+        app.post(NamedRoutes.sessionsPath(), SessionsController::create);
+        //app.delete("/sessions", SessionsController::destroy);
 
         app.get(helloPath(), ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
