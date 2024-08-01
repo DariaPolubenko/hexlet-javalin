@@ -1,6 +1,8 @@
-@import gg.jte.Content
+@import org.example.hexlet.dto.BasePage
 @import org.example.hexlet.NamedRoutes
+@import gg.jte.Content
 @param Content content
+@param BasePage page = null
 
 <!doctype html>
 <html lang="en">
@@ -24,6 +26,11 @@
             <a href="${NamedRoutes.buildUsersPath()}" class="btn btn-outline-primary rounded-1 fw-light">Добавить пользователя</a>
         </p>
     </div>
+    @if(page != null && page.getFlash() != null)
+        <div class="alert alert-success" role="alert">
+            ${page.getFlash()}
+        </div>
+    @endif
     ${content}
     <footer>
         <a href="https://github.com/DariaPolubenko">GitHub</a>
