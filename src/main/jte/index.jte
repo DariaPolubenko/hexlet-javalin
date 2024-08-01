@@ -2,7 +2,6 @@
 @import org.example.hexlet.dto.MainPage
 @param MainPage page
 
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -35,7 +34,16 @@
             </p>
         </div>
     <p>Добро пожаловать, ${page.getCurrentUser()}.
-        Чтобы разлогиниться, удалите куку JSESSIONID из браузера</p>
+        Чтобы разлогиниться, удалите куку JSESSIONID из браузера или нажмите кнопку "Выйти"</p>
+    <form action="${NamedRoutes.destroySessionsPath()}" method="post">
+        <div class="mb-3">
+            <label>
+                <input type="submit" class="btn btn-primary mb-3" value="Выйти"/>
+            </label>
+        </div>
+    </form>
+
+
     @endif
     <h3 style="margin-top: 25px" class="fw-light" class="text-body-emphasis">Привет, Хекслет!</h3>
     <p>Javalin + jte</p>
