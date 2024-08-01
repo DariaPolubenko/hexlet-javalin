@@ -60,5 +60,9 @@ public class NamedRoutes {
         return "/sessions/build";
     }
 
+    public static String destroySessionsPath() {
+        return "/sessions/delete";
+    }
+
 
 }
