@@ -41,14 +41,14 @@ public class App {
             ctx.cookie("visited", String.valueOf(true));
         });
 
-        app.get(NamedRoutes.buildSessionsPath(), SessionsController::build);
-        app.post(NamedRoutes.sessionsPath(), SessionsController::create);
-        app.post(NamedRoutes.destroySessionsPath(), SessionsController::destroy);
-
         app.get(helloPath(), ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.result("Hello, " + name + "!");
         });
+
+        app.get(NamedRoutes.buildSessionsPath(), SessionsController::build);
+        app.post(NamedRoutes.sessionsPath(), SessionsController::create);
+        app.post(NamedRoutes.destroySessionsPath(), SessionsController::destroy);
 
         app.get(coursesPath(), CoursesController::show);
         app.get(buildCoursesPath(), CoursesController::build);
