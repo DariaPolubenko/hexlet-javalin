@@ -3,7 +3,8 @@
 @param CoursesPage page
 
 @template.layout.page(
-content = @`
+    page = page,
+    content = @`
     <form style="margin-top: 10px" action="/courses" method="get">
         <input type="search" name="term" value="${page.getTerm()}">
         <input type="submit" value="Искать">
