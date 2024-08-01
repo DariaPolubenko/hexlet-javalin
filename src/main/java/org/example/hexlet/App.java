@@ -35,7 +35,7 @@ public class App {
 
         app.get(mainPath(), ctx -> {
             var visited = Boolean.valueOf(ctx.cookie("visited"));
-            var currentUser = ctx.cookie("JSESSIONID");
+            String currentUser = ctx.sessionAttribute("currentUser");
             var page = new MainPage(visited, currentUser);
             ctx.render("index.jte", model("page", page));
             ctx.cookie("visited", String.valueOf(true));
@@ -43,7 +43,7 @@ public class App {
 
         app.get(NamedRoutes.buildSessionsPath(), SessionsController::build);
         app.post(NamedRoutes.sessionsPath(), SessionsController::create);
-        //app.delete("/sessions", SessionsController::destroy);
+        app.post(NamedRoutes.destroySessionsPath(), SessionsController::destroy);
 
         app.get(helloPath(), ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
