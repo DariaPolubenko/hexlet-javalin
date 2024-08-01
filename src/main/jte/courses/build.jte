@@ -6,6 +6,7 @@
 content = @`
     @if(page.getErrors() != null)
         <div class="alert alert-danger" role="alert">
+            ${page.getFlash()}
             <ul>
                 @for(var validator : page.getErrors().values())
                     @for(var error : validator)
