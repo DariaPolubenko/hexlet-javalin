@@ -3,6 +3,7 @@ package org.example.hexlet.controller;
 import io.javalin.http.Context;
 import io.javalin.validation.ValidationException;
 import org.apache.commons.text.StringEscapeUtils;
+import org.example.hexlet.NamedRoutes;
 import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.User;
@@ -14,7 +15,9 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 public class UsersController {
     public static void showUsers(Context ctx) {
         var users = UserRepository.getEntities();
+        String flash = ctx.consumeSessionAttribute("flash");
         var page = new UsersPage(users);
+        page.setFlash(flash);
         ctx.render("users/showUsers.jte", model("page", page));
     }
 
@@ -46,7 +49,8 @@ public class UsersController {
                     .get();
             var user = new User(name, email, password);
             UserRepository.save(user);
-            ctx.redirect("/users");
+            ctx.sessionAttribute("flash", "Пользователь успешно добавлен");
+            ctx.redirect(NamedRoutes.usersPath());
         } catch (ValidationException e) {
             var page = new BuildUserPage(name, email, e.getErrors());
             ctx.render("users/build.jte", model("page", page));
