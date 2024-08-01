@@ -3,6 +3,7 @@
 @param UsersPage page
 
 @template.layout.page(
+page = page,
 content = @`
     @if(page.getUsers().isEmpty())
         <p>Пока не добавлено ни одного пользователя</p>
