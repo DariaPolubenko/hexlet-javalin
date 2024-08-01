@@ -52,4 +52,13 @@ public class NamedRoutes {
         return "/users/build";
     }
 
+    public static String sessionsPath() {
+        return "/sessions";
+    }
+
+    public static String buildSessionsPath() {
+        return "/sessions/build";
+    }
+
+
 }
