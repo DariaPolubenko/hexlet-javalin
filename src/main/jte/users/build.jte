@@ -5,13 +5,15 @@
 @template.layout.page(
 content = @`
     @if(page.getErrors() != null)
-        <ul>
-            @for(var validator : page.getErrors().values())
-                @for(var error : validator)
-                    <li>${error.getMessage()}</li>
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @for(var validator : page.getErrors().values())
+                    @for(var error : validator)
+                        <li>${error.getMessage()}</li>
+                    @endfor
                 @endfor
-            @endfor
-        </ul>
+            </ul>
+        </div>
     @endif
 
     <p style="margin-top: 35px" class="fw-light">Добавление пользователя</p>
