@@ -22,7 +22,9 @@ public class UsersController {
     }
 
     public static void build(Context ctx) {
+        String flash = ctx.consumeSessionAttribute("flash");
         var page = new BuildUserPage();
+        page.setFlash(flash);
         ctx.render("users/build.jte", model("page", page));
     }
 
