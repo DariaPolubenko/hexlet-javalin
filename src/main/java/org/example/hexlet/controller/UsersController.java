@@ -9,11 +9,13 @@ import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.User;
 import org.example.hexlet.repository.UserRepository;
 
+import java.sql.SQLException;
+
 import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class UsersController {
-    public static void showUsers(Context ctx) {
+    public static void showUsers(Context ctx) throws SQLException {
         var users = UserRepository.getEntities();
         String flash = ctx.consumeSessionAttribute("flash");
         var page = new UsersPage(users);
@@ -41,7 +43,7 @@ public class UsersController {
         ctx.result(escapedId);
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         var name = capitalize(ctx.formParam("name"));
         var email = ctx.formParam("email").trim().toLowerCase();
         try {
