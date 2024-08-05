@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class CourseRepository extends BaseRepository {
 
-    public static void save (Course course) throws SQLException {
+    public static void save(Course course) throws SQLException {
         String sql = "INSERT INTO courses (name, description) VALUES (?, ?)";
         try (var conn = dataSource.getConnection();
                 var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -18,7 +18,7 @@ public class CourseRepository extends BaseRepository {
             preparedStatement.setString(2, course.getDescription());
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
-            // Устанавливаем ID в сохраненную сущность
+
             if (generatedKeys.next()) {
                 course.setId(generatedKeys.getLong(1));
             } else {
@@ -84,6 +84,5 @@ public class CourseRepository extends BaseRepository {
                 .findAny();
         return users;
     }
-
      */
 }
