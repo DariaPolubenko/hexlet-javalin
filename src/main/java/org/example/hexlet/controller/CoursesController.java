@@ -10,10 +10,12 @@ import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 
+import java.sql.SQLException;
+
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class CoursesController {
-    public static void show(Context ctx) {
+    public static void show(Context ctx) throws SQLException {
         var term = ctx.queryParam("term");
 
         if (term != null) {
@@ -46,7 +48,7 @@ public class CoursesController {
         ctx.render("courses/build.jte", model("page", page));
     }
 
-    public static void find(Context ctx) {
+    public static void find(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var course = CourseRepository.find(id).orElseThrow(() -> new NotFoundResponse("Course with id = " + id + " not found"));
         var page = new CoursePage(course);
@@ -54,7 +56,7 @@ public class CoursesController {
 
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         try {
             var name = ctx.formParamAsClass("name", String.class)
                     .check(value -> value.length() > 2, "Имя не может содержать менее 3 символов")
