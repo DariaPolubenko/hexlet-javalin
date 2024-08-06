@@ -12,8 +12,6 @@ import org.example.hexlet.repository.BaseRepository;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
@@ -22,8 +20,6 @@ import static org.example.hexlet.NamedRoutes.*;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        //addCourses();
-
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl("jdbc:h2:mem:hexlet_project;DB_CLOSE_DELAY=-1;");
 
@@ -81,26 +77,5 @@ public class App {
         });
 
         app.start(7070);
-    }
-
-    /*
-    public static void addCourses() {
-        List<Course> courses = new ArrayList<>(List.of(new Course("Java-разработчик", getDescription("javaDescription.txt")),
-                new Course("PHP-разработчик", getDescription("phpDescription.txt")),
-                new Course("Python-разработчик", getDescription("pythonDescription.txt"))));
-
-        for (var course : courses) {
-            CourseRepository.save(course);
-        }
-    }
-     */
-
-    public static String getDescription(String file) {
-        var path = Paths.get("/Users/new/Desktop/Develop/HexletJavalin/src/main/resources/" + file).toAbsolutePath().normalize();
-        try {
-            return Files.readString(path);
-        } catch (Exception e) {
-            return "Описание отсутствует";
-        }
     }
 }
